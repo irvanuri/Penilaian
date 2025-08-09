@@ -65,6 +65,50 @@ if not st.session_state.data.empty:
         col5.write(row["UAS"])
         col6.write(row["Rata-rata"])
         col7.write(row["Predikat"])
+import io
+import datetime
+
+# --- Bagian Download Rekap (paste menggantikan bagian lama) ---
+st.subheader("💾 Download Rekap Nilai")
+
+# Salin DataFrame supaya tidak mengubah asli
+df_export = st.session_state.data.copy()
+
+if not df_export.empty:
+    # (opsional) bulatkan angka ke 1 desimal
+    if "Rata-rata" in df_export.columns:
+        df_export = df_export.round({col:1 for col in df_export.select_dtypes(include='number').columns})
+
+    # Buat dua kolom untuk tombol CSV dan XLSX
+    col_csv, col_xl = st.columns(2)
+
+    # --- CSV ---
+    csv_bytes = df_export.to_csv(index=False).encode("utf-8")
+    with col_csv:
+        st.download_button(
+            label="⬇️ Download CSV",
+            data=csv_bytes,
+            file_name=f"rekap_nilai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+            mime="text/csv"
+        )
+
+    # --- XLSX (in-memory) ---
+    towrite = io.BytesIO()
+    # gunakan engine='xlsxwriter' (pastikan ada di requirements.txt)
+    with pd.ExcelWriter(towrite, engine="xlsxwriter") as writer:
+        df_export.to_excel(writer, index=False, sheet_name="Rekap Nilai")
+        # writer.save()  # tidak perlu karena with otomatis menyimpan
+    towrite.seek(0)
+
+    with col_xl:
+        st.download_button(
+            label="⬇️ Download XLSX",
+            data=towrite,
+            file_name=f"rekap_nilai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+else:
+    st.info("Belum ada data yang bisa diunduh.")
 
         # Tombol hapus di kolom terakhir
         hapus = col8.button("🗑 Hapus", key=f"hapus_{i}")
@@ -94,6 +138,7 @@ if len(st.session_state.data) >= 5:
     st.write("Masukkan nilai untuk memprediksi predikat:")
     nilai_harian_ai = st.number_input("Nilai Harian (AI)", 0, 100, 70, key="nilai_harian_ai")
     tugas_ai = st.number_
+
 
 
 
