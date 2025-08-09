@@ -20,9 +20,10 @@ if "data" not in st.session_state:
 with st.form("form_nilai"):
     nama = st.text_input("Nama Siswa")
     nilai_harian = st.number_input("Nilai Harian", 0, 100, 0)
-    tugas = st.number_input("Nilai Tugas", 0, 100, 0)
-    uts = st.number_input("Nilai UTS", 0, 100, 0)
-    uas = st.number_input("Nilai UAS", 0, 100, 0)
+    tugas = st.number_input("Nilai Tugas", min_value=0.0, max_value=100.0, value=0.0, step=0.1, format="%.2f")
+uts = st.number_input("Nilai UTS", min_value=0.0, max_value=100.0, value=0.0, step=0.1, format="%.2f")
+uas = st.number_input("Nilai UAS", min_value=0.0, max_value=100.0, value=0.0, step=0.1, format="%.2f")
+
     submit = st.form_submit_button("Tambah Data")
 
 if submit:
@@ -93,3 +94,4 @@ if len(st.session_state.data) >= 5:
     st.write("Masukkan nilai untuk memprediksi predikat:")
     nilai_harian_ai = st.number_input("Nilai Harian (AI)", 0, 100, 70, key="nilai_harian_ai")
     tugas_ai = st.number_
+
