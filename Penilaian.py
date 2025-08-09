@@ -109,7 +109,10 @@ if not df_export.empty:
         )
 else:
     st.info("Belum ada data yang bisa diunduh.")
+    
+        )
 
+    
         # Tombol hapus di kolom terakhir
         hapus = col8.button("🗑 Hapus", key=f"hapus_{i}")
         if hapus:
@@ -138,6 +141,7 @@ if len(st.session_state.data) >= 5:
     st.write("Masukkan nilai untuk memprediksi predikat:")
     nilai_harian_ai = st.number_input("Nilai Harian (AI)", 0, 100, 70, key="nilai_harian_ai")
     tugas_ai = st.number_
+
 
 
 
