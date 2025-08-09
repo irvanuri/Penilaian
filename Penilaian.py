@@ -40,9 +40,11 @@ with st.form("form_nilai"):
     uts = st.number_input("Nilai UTS", 0, 100, 0)
     uas = st.number_input("Nilai UAS", 0, 100, 0)
     submit = st.form_submit_button("Tambah Data")
+    nama =st.text_input("Nilai Harian")
+    harian = st.number_input_("Nilai Harian",0,100,0)
 
 if submit:
-    rata = np.mean([tugas, uts, uas])
+    rata = np.mean([tugas, uts, uas,harian])
 
     # Tentukan predikat manual
     def get_predikat(nilai):
@@ -69,7 +71,27 @@ if submit:
 # 3. Tampilkan Data Rekap
 # -------------------------
 st.subheader("📋 Rekap Nilai")
-st.dataframe(st.session_state.data)
+
+if not st.session_state.data.empty:
+    for i, row in st.session_state.data.iterrows():
+        col1, col2, col3, col4, col5, col6, col7 = st.columns([2, 1, 1, 1, 1, 1, 1])
+        col1.write(row["Nama"])
+        col2.write(row["Tugas"])
+        col3.write(row["UTS"])
+        col4.write(row["UAS"])
+        col5.write(row["Rata-rata"])
+        col6.write(row["Predikat"])
+
+        # Tombol hapus di kolom terakhir
+        hapus = col7.button("🗑 Hapus", key=f"hapus_{i}")
+        if hapus:
+            st.session_state.data = st.session_state.data.drop(i)
+            st.session_state.data.reset_index(drop=True, inplace=True)
+            st.success(f"Data '{row['Nama']}' berhasil dihapus!")
+            st.experimental_rerun()
+else:
+    st.warning("Belum ada data.")
+
 
 # -------------------------
 # 4. AI Model (Logistic Regression)
@@ -110,3 +132,4 @@ st.download_button(
     file_name="rekap_nilai.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
