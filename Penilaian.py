@@ -8,8 +8,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-st.set_page_config(page_title="Penilaian Otomatis Guru", page_icon="📊", layout="wide")
-st.title("📊 Aplikasi Penilaian Otomatis (Streamlit)")
+st.set_page_config(page_title="Penilaian Otomatis yang memudahkan", page_icon="📊", layout="wide")
+st.title("📊 Aplikasi Penilaian Otomatis")
 
 # -------------------------
 # Helper
@@ -191,3 +191,4 @@ if not df_export.empty:
         )
 else:
     st.info("Belum ada data yang bisa diunduh.")
+
